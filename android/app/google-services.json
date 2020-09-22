@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "371752523381",
+    "firebase_url": "https://superhero-moods.firebaseio.com",
+    "project_id": "superhero-moods",
+    "storage_bucket": "superhero-moods.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:371752523381:android:f73c1b414895d74addca3c",
+        "android_client_info": {
+          "package_name": "com.owlprogrammer.learn_flutter_3"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "371752523381-2q6ga77f7i5pqlqam64i161poo732t1k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwuHITZsa3Wwqku2vkhVV0HFuU26C2W30"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "371752523381-2q6ga77f7i5pqlqam64i161poo732t1k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
