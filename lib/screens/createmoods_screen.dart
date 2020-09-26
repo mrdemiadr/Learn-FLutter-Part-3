@@ -9,6 +9,15 @@ class CreateMoodsScreen extends StatefulWidget {
 class _CreateMoodsScreenState extends State<CreateMoodsScreen> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      body: Center(
+        child: RaisedButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text('Back'),
+        ),
+      ),
+    );
   }
 }

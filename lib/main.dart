@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:learn_flutter_3/screens/createmoods_screen.dart';
 import 'package:learn_flutter_3/screens/main_screen.dart';
 import 'package:learn_flutter_3/screens/register_screen.dart';
+import 'package:learn_flutter_3/screens/userprofilename_screen.dart';
 import 'package:learn_flutter_3/screens/welcome_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -21,6 +22,7 @@ class MyApp extends StatelessWidget {
         RegisterScreen.id: (context) => RegisterScreen(),
         MainScreen.id: (context) => MainScreen(),
         CreateMoodsScreen.id: (context) => CreateMoodsScreen(),
+        UserProfileName.id: (context) => UserProfileName(),
       },
     );
   }

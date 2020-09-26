@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:learn_flutter_3/screens/main_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:learn_flutter_3/screens/userprofilename_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   static const String id = 'register_screen';
@@ -12,6 +12,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _auth = FirebaseAuth.instance;
   String usernameInput;
   String passwordInput;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +39,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   usernameInput = value;
                 },
                 decoration: InputDecoration(
-                  labelText: 'Username',
+                  labelText: 'Email',
                 ),
               ),
               SizedBox(
@@ -72,7 +73,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             await _auth.createUserWithEmailAndPassword(
                                 email: usernameInput, password: passwordInput);
                         if (newUser != null) {
-                          Navigator.popAndPushNamed(context, MainScreen.id);
+                          Navigator.popAndPushNamed(
+                              context, UserProfileName.id);
                         }
                       } catch (e) {
                         print(e);

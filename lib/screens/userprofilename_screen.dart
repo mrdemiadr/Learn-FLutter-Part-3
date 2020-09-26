@@ -1,30 +1,45 @@
 import 'package:flutter/material.dart';
-import 'package:learn_flutter_3/screens/main_screen.dart';
-import 'package:learn_flutter_3/screens/register_screen.dart';
+import 'main_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class WelcomeScreen extends StatefulWidget {
-  static const String id = 'welcome_screen';
+class UserProfileName extends StatefulWidget {
+  static const String id = 'useprofilename_screen';
+
   @override
-  _WelcomeScreenState createState() => _WelcomeScreenState();
+  _UserProfileNameState createState() => _UserProfileNameState();
 }
 
-class _WelcomeScreenState extends State<WelcomeScreen> {
+class _UserProfileNameState extends State<UserProfileName> {
   final _auth = FirebaseAuth.instance;
-  String usernameInput;
-  String passwordInput;
+  User _registeredUser;
+  String _profileName;
+
+  @override
+  void initState() {
+    getCurrentUser();
+    super.initState();
+  }
+
+  void getCurrentUser() {
+    final user = _auth.currentUser;
+    if (user != null) {
+      _registeredUser = user;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.0),
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                'Welcome Hero!',
+                'Set Your Profile Name',
                 style: TextStyle(
                   fontSize: 32.0,
                   fontWeight: FontWeight.w700,
@@ -35,43 +50,33 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               ),
               TextField(
                 onChanged: (value) {
-                  usernameInput = value;
+                  _profileName = value;
                 },
                 decoration: InputDecoration(
-                  labelText: 'Email',
+                  labelText: 'Profile Name',
                 ),
               ),
               SizedBox(
                 height: 20.0,
-              ),
-              TextField(
-                obscureText: true,
-                onChanged: (value) {
-                  passwordInput = value;
-                },
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                ),
-              ),
-              SizedBox(
-                height: 20,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   RaisedButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, RegisterScreen.id);
+                      _registeredUser.delete();
+                      Navigator.pop(context);
                     },
-                    child: Text('Sign Up'),
+                    child: Text(
+                      'Back',
+                    ),
                   ),
                   RaisedButton(
                     onPressed: () async {
                       try {
-                        final userLogIn =
-                            await _auth.signInWithEmailAndPassword(
-                                email: usernameInput, password: passwordInput);
-                        if (userLogIn != null) {
+                        await _registeredUser.updateProfile(
+                            displayName: _profileName);
+                        if (_profileName != null) {
                           Navigator.pushReplacementNamed(
                               context, MainScreen.id);
                         }
@@ -79,7 +84,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         print(e);
                       }
                     },
-                    child: Text('Sign In'),
+                    child: Text('Submit'),
                   ),
                 ],
               ),
