@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class UserDisplayName extends StatefulWidget {
-  static const String id = 'useprofilename_screen';
+  static const String id = 'userdisplayname_screen';
 
   @override
   _UserDisplayNameState createState() => _UserDisplayNameState();
