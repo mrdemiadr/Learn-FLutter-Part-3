@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:learn_flutter_3/screens/userprofilename_screen.dart';
+import 'package:learn_flutter_3/screens/main_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   static const String id = 'register_screen';
+
   @override
   _RegisterScreenState createState() => _RegisterScreenState();
 }
@@ -73,8 +74,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             await _auth.createUserWithEmailAndPassword(
                                 email: usernameInput, password: passwordInput);
                         if (newUser != null) {
-                          Navigator.popAndPushNamed(
-                              context, UserProfileName.id);
+                          Navigator.popAndPushNamed(context, MainScreen.id);
                         }
                       } catch (e) {
                         print(e);

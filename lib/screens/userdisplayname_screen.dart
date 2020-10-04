@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'main_screen.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 
-class UserProfileName extends StatefulWidget {
+class UserDisplayName extends StatefulWidget {
   static const String id = 'useprofilename_screen';
 
   @override
-  _UserProfileNameState createState() => _UserProfileNameState();
+  _UserDisplayNameState createState() => _UserDisplayNameState();
 }
 
-class _UserProfileNameState extends State<UserProfileName> {
+class _UserDisplayNameState extends State<UserDisplayName> {
   final _auth = FirebaseAuth.instance;
-  User _registeredUser;
-  String _profileName;
+  User _activeUser;
+  dynamic _setDisplayName;
 
   @override
   void initState() {
@@ -23,7 +23,7 @@ class _UserProfileNameState extends State<UserProfileName> {
   void getCurrentUser() {
     final user = _auth.currentUser;
     if (user != null) {
-      _registeredUser = user;
+      _activeUser = user;
     }
   }
 
@@ -50,10 +50,10 @@ class _UserProfileNameState extends State<UserProfileName> {
               ),
               TextField(
                 onChanged: (value) {
-                  _profileName = value;
+                  _setDisplayName = value;
                 },
                 decoration: InputDecoration(
-                  labelText: 'Profile Name',
+                  labelText: 'Display Name',
                 ),
               ),
               SizedBox(
@@ -64,7 +64,6 @@ class _UserProfileNameState extends State<UserProfileName> {
                 children: [
                   RaisedButton(
                     onPressed: () {
-                      _registeredUser.delete();
                       Navigator.pop(context);
                     },
                     child: Text(
@@ -74,11 +73,10 @@ class _UserProfileNameState extends State<UserProfileName> {
                   RaisedButton(
                     onPressed: () async {
                       try {
-                        await _registeredUser.updateProfile(
-                            displayName: _profileName);
-                        if (_profileName != null) {
-                          Navigator.pushReplacementNamed(
-                              context, MainScreen.id);
+                        await _activeUser.updateProfile(
+                            displayName: _setDisplayName);
+                        if (_setDisplayName != null) {
+                          Navigator.pop(context);
                         }
                       } catch (e) {
                         print(e);
