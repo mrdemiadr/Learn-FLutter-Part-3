@@ -13,6 +13,10 @@ class CreateMoodsScreen extends StatefulWidget {
 }
 
 class _CreateMoodsScreenState extends State<CreateMoodsScreen> {
+  int selectedIndex = -1;
+  String namaHero;
+  String imgHero;
+  String moodsText;
   Future<HeroData> getData() async {
     http.Response response = await http.get(
         'https://www.superheroapi.com/api.php/10224255825447393/search/batman');
@@ -44,18 +48,27 @@ class _CreateMoodsScreenState extends State<CreateMoodsScreen> {
                         children: [
                           InkWell(
                             child: Card(
+                              shape: (selectedIndex == index)
+                                  ? RoundedRectangleBorder(
+                                      side:
+                                          BorderSide(color: Colors.blueAccent))
+                                  : null,
                               child: Container(
                                 padding: EdgeInsets.symmetric(vertical: 20.0),
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceAround,
                                   children: [
-                                    Image.network(heroesData.img),
-                                    Text(
-                                      heroesData.name,
-                                      style: TextStyle(
-                                          fontSize: 20.0,
-                                          fontWeight: FontWeight.w700),
+                                    Flexible(
+                                        child: Image.network(heroesData.img)),
+                                    Flexible(
+                                      child: Text(
+                                        heroesData.name,
+                                        style: TextStyle(
+                                            fontSize: 20.0,
+                                            fontWeight: FontWeight.w700),
+                                        textAlign: TextAlign.center,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -63,7 +76,13 @@ class _CreateMoodsScreenState extends State<CreateMoodsScreen> {
                                 alignment: Alignment.centerLeft,
                               ),
                             ),
-                            onTap: null,
+                            onTap: () {
+                              setState(() {
+                                selectedIndex = index;
+                                namaHero = heroesData.name;
+                                imgHero = heroesData.img;
+                              });
+                            },
                           )
                         ],
                       );
@@ -80,11 +99,17 @@ class _CreateMoodsScreenState extends State<CreateMoodsScreen> {
               'Moods',
               style: TextStyle(fontWeight: FontWeight.w700),
             ),
-            title: TextField(),
+            title: TextField(
+              onChanged: (value) {
+                moodsText = value;
+              },
+            ),
             trailing: IconButton(
               icon: Icon(Icons.send),
               onPressed: () {
-                Navigator.pop(context);
+                print(namaHero);
+                print(imgHero);
+                print(moodsText);
               },
             ),
           ),
