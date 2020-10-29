@@ -1,7 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:learn_flutter_3/model/herodata.dart';
 import 'package:learn_flutter_3/services/heroapi_connection.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class CreateMoodsScreen extends StatefulWidget {
   static const String id = 'createmoods_screen';
@@ -17,6 +18,7 @@ class _CreateMoodsScreenState extends State<CreateMoodsScreen> {
   String imgHero;
   int selectedIndex = -1;
   String moodsText;
+  final firestoreInstance = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -89,11 +91,11 @@ class _CreateMoodsScreenState extends State<CreateMoodsScreen> {
                                   ),
                                 ),
                                 onTap: () {
+                                  namaHero = heroesData.name;
+                                  imgHero = heroesData.img;
                                   FocusScope.of(context).unfocus();
                                   setState(() {
                                     selectedIndex = index;
-                                    namaHero = heroesData.name;
-                                    imgHero = heroesData.img;
                                   });
                                 },
                               )
@@ -123,10 +125,24 @@ class _CreateMoodsScreenState extends State<CreateMoodsScreen> {
             ),
             trailing: IconButton(
               icon: Icon(Icons.send),
-              onPressed: () {
-                print(namaHero);
+              onPressed: () async {
+                /*print(namaHero);
                 print(imgHero);
-                print(moodsText);
+                print(moodsText);*/
+                var loggedInUser = FirebaseAuth.instance.currentUser;
+                await firestoreInstance
+                    .collection('moods')
+                    .doc(loggedInUser.email)
+                    .set({
+                      'namahero': '$namaHero',
+                      'urlhero': '$imgHero',
+                      'moodstext': '$moodsText'
+                    })
+                    .then((value) => print(
+                        '${loggedInUser.displayName} berhasil menambahkan moods'))
+                    .catchError(
+                        (error) => print('Gagal menambahkan moods ke databse'));
+                Navigator.pop(context);
               },
             ),
           ),

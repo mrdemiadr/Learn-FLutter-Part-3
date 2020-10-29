@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:learn_flutter_3/screens/createmoods_screen.dart';
 import 'package:learn_flutter_3/screens/userdisplayname_screen.dart';
 import 'package:learn_flutter_3/screens/welcome_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MainScreen extends StatefulWidget {
   static const String id = 'main_screen';
@@ -14,14 +15,18 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   final _auth = FirebaseAuth.instance;
   User loggedInUser;
-  dynamic myDisplayName = 'User';
+  String myDisplayName = 'User';
+  var _firebaseFirestore = FirebaseFirestore.instance.collection('moods');
   String imgProfile =
       'https://www.pngkey.com/png/detail/230-2301779_best-classified-apps-default-user-profile.png';
+  String namaHero = 'superheroname';
+  String moodsHero = '.....';
 
   @override
   void initState() {
     super.initState();
     getCurrentUser();
+    streamFirestoreData();
   }
 
   void getCurrentUser() {
@@ -32,6 +37,22 @@ class _MainScreenState extends State<MainScreen> {
         myDisplayName = loggedInUser.displayName;
       }
     }
+  }
+
+  void streamFirestoreData() {
+    _firebaseFirestore.doc(loggedInUser.email).snapshots().listen((event) {
+      if (event.data() != null) {
+        setState(() {
+          namaHero = event.data()['namahero'];
+          imgProfile = event.data()['urlhero'];
+          moodsHero = event.data()['moodstext'];
+        });
+      }
+    });
+  }
+
+  void deleteMoods() async {
+    await _firebaseFirestore.doc(loggedInUser.email).delete();
   }
 
   @override
@@ -50,7 +71,7 @@ class _MainScreenState extends State<MainScreen> {
                   radius: 80.0,
                 ),
                 Text(
-                  'Helo $myDisplayName, you are Superheroname!',
+                  'Helo $myDisplayName, you are $namaHero!',
                   style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w700),
                   textAlign: TextAlign.center,
                 ),
@@ -58,8 +79,20 @@ class _MainScreenState extends State<MainScreen> {
                   height: 20.0,
                 ),
                 Text(
-                  'Moods: ........',
+                  'Moods: $moodsHero',
                   style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w700),
+                ),
+                RaisedButton(
+                  onPressed: () {
+                    deleteMoods();
+                    setState(() {
+                      imgProfile =
+                      'https://www.pngkey.com/png/detail/230-2301779_best-classified-apps-default-user-profile.png';
+                      namaHero = 'superheroname';
+                      moodsHero = '.....';
+                    });
+                  },
+                  child: Text('Delete moods'),
                 ),
                 Expanded(
                   child: Row(
@@ -84,7 +117,10 @@ class _MainScreenState extends State<MainScreen> {
                         tooltip: 'Create Moods',
                         icon: Icon(Icons.person_add),
                         onPressed: () {
-                          Navigator.pushNamed(context, CreateMoodsScreen.id);
+                          Navigator.pushNamed(context, CreateMoodsScreen.id)
+                              .whenComplete(
+                                () => {streamFirestoreData()},
+                          );
                         },
                       ),
                       IconButton(

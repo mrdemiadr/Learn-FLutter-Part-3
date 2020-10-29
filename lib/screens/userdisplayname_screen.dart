@@ -10,7 +10,7 @@ class UserDisplayName extends StatefulWidget {
 }
 
 class _UserDisplayNameState extends State<UserDisplayName> {
-  final _auth = FirebaseAuth.instance;
+/*  final _auth = FirebaseAuth.instance.;
   User _activeUser;
   dynamic _setDisplayName;
 
@@ -25,7 +25,9 @@ class _UserDisplayNameState extends State<UserDisplayName> {
     if (user != null) {
       _activeUser = user;
     }
-  }
+  }*/
+  final _activeUser = FirebaseAuth.instance.currentUser;
+  String _setDisplayName;
 
   @override
   Widget build(BuildContext context) {
